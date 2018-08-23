@@ -12,24 +12,19 @@ std::string NumberBaseConverter(const std::string &str,int baseFrom,int baseTo)
 			data[i] = str[i] - 'a' + 10;
 		else if('A' <= str[i] && str[i] <= 'Z')
 			data[i] = str[i] - 'A' + 10;
-	//a lambda functon to judge whether the dividend is zero
-	auto isEnd = [=]()-> bool {
-		for(size_t i = 0;i < n;++i)
-			if(data[i])
-				return false;
-		return true;
-	};
+
 	std::string ans;
-	while(!isEnd())
+	for(size_t first_not_zero = 0;first_not_zero != n;)
 	{
 		int r = 0;//r is remainder
-		for(size_t i = 0;i < n;++i)
+		for(size_t i = first_not_zero;i < n;++i)
 		{
 			r = r * baseFrom + data[i];
 			data[i] = r / baseTo;
 			r %= baseTo;
 		}
 		ans.push_back(table[r]);
+		for(;!data[first_not_zero] && first_not_zero < n;++first_not_zero);
 	}
 	delete[] data;
 	ans.assign(ans.rbegin(), ans.rend());//reverse the ans
